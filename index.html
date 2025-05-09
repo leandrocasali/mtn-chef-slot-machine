@@ -175,20 +175,23 @@
         }
 
         button {
-            background: #36eb0d;
-            color: white;
+            background: #ffce00;
+            color: #4a0d0d;
             border: none;
             padding: 15px 30px;
             border-radius: 25px;
-            font-size: 1.2em;
+            font-size: 1.5em;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
             width: 100%;
             max-width: 300px;
+            border: solid 1px #4a0d0d;
+            font-weight: 700;
         }
 
+
         button:hover {
-            background: #279a00;
+            background: #b69202;
             transform: scale(1.05);
         }
 
@@ -236,10 +239,11 @@
         }
 
         .popup-content p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            color: #333;
-        }
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
 
         .popup-content button {
             max-width: 200px;
@@ -294,7 +298,7 @@
     <div class="container">
         <marquee direction="left" behavior="scroll" scrollamount="5"><span style="color:white; font-size:30px;">Try your luck and win a prize!</span></marquee>
         <!-- <img class="logo" src="https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2023/04/logo-footer-300x81.png" alt="Logo"> ... --> 
-        <img style="max-width:370px; text-align:center;" src="https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/img-land.png">
+        <img style="max-width:370px; text-align:center;" src="https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/img-landing2.png">
         <div class="slot-machine">
             <div class="reels">
                 <div class="reel" id="reel1"><div class="reel-content" id="reelContent1"></div><div class="reel-window"></div></div>
@@ -411,13 +415,13 @@
 
         function getPrize(key) {
             const prizes = {
-                'helado': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-helado.png' },
-                'dona': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-dona.png' },
-                'hamburguesa': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-hamburguesas.png' },
-                'ramen': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-ramen.png' },
-                'taco': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-taco.png' },
-                'papas': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-papas.png' },
-                'pizza': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-pizza.png' }
+                'helado': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'dona': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'hamburguesa': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'ramen': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'taco': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'papas': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' },
+                'pizza': { text: 'YOU WIN 15MB DATA PACKAGE+ MTN CHEF SUBSCRIPTION!', image: 'https://cdn3d.iconscout.com/3d/premium/thumb/gift-3d-icon-download-in-png-blend-fbx-gltf-file-formats--box-giftbox-present-celebration-shopping-pack-e-commerce-icons-5326824.png?f=webp' }
             };
             return prizes[key];
         }
