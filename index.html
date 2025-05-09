@@ -1,0 +1,435 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackpot Slot Machine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            min-height: 100vh;
+            background: black;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .background-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            max-width: 300px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        h1 {
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .slot-machine {
+            background: #fff;
+            border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid black;
+    background: linear-gradient(-45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  background-size: 400% 400%;
+  animation: gradient 7s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+        .reels {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .reel {
+            width: 100px;
+            height: 200px;
+            background: #000;
+            border: 2px solid #ddd;
+            overflow: hidden;
+            position: relative;
+            border-radius: 5px;
+        }
+
+        .reel-window {
+            width: 100%;
+            height: 80px;
+            background: transparent;
+            position: absolute;
+            top: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .reel-content {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation Wrote: none;
+            transition: none;
+        }
+
+        .symbol {
+            height: 80px;
+            width: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .symbol img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        button {
+            background: #36eb0d;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        button:hover {
+            background: #279a00;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            min-height: 50px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 300px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .popup-content p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .popup-content button {
+            max-width: 200px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .logo {
+                max-width: 300px;
+            }
+
+            .slot-machine {
+                padding: 15px;
+            }
+
+            .reel {
+                width: 100px;
+                height: 150px;
+            }
+
+            .symbol {
+                height: 60px;
+                width: 60px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            .popup-content {
+                width: 280px;
+                padding: 15px;
+            }
+
+            .popup-content p {
+                font-size: 1em;
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-240px); }
+        }
+    </style>
+</head>
+<body>
+    <img class="background-img" src="https://i.pinimg.com/736x/bd/f9/ba/bdf9baebfce79f6c83dc8e259a3484f3.jpg" alt="Background">
+    <div class="container">
+        <marquee direction="left" behavior="scroll" scrollamount="5"><span style="color:white; font-size:30px;">Try your luck and win a prize!</span></marquee>
+        <!-- <img class="logo" src="https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2023/04/logo-footer-300x81.png" alt="Logo"> ... --> 
+        <img style="max-width:370px; text-align:center;" src="https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/img-land.png">
+        <div class="slot-machine">
+            <div class="reels">
+                <div class="reel" id="reel1"><div class="reel-content" id="reelContent1"></div><div class="reel-window"></div></div>
+                <div class="reel" id="reel2"><div class="reel-content" id="reelContent2"></div><div class="reel-window"></div></div>
+                <div class="reel" id="reel3"><div class="reel-content" id="reelContent3"></div><div class="reel-window"></div></div>
+            </div>
+            <button id="spinButton">SPIN!</button>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <div class="popup" id="winPopup">
+        <div class="popup-content">
+            <img id="prizeImage" src="" alt="Premio">
+            <p id="prizeText"></p>
+            <button id="continueButton">CONTINUE</button>
+        </div>
+    </div>
+
+    <script>
+        const symbols = [
+            { key: 'helado', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-helado.png', alt: 'Helado' },
+            { key: 'dona', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-dona.png', alt: 'Dona' },
+            { key: 'hamburguesa', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-hamburguesa.png', alt: 'hamburguesa' },
+            { key: 'ramen', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-ramen.png', alt: 'Ramen' },
+            { key: 'taco', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-taco.png', alt: 'Taco' },
+            { key: 'papas', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-papas.png', alt: 'Papas' },
+            { key: 'pizza', url: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-pizza.png', alt: 'Pizza' }
+        ];
+
+        const reels = [
+            { element: document.getElementById('reel1'), content: document.getElementById('reelContent1') },
+            { element: document.getElementById('reel2'), content: document.getElementById('reelContent2') },
+            { element: document.getElementById('reel3'), content: document.getElementById('reelContent3') }
+        ];
+        const spinButton = document.getElementById('spinButton');
+        const result = document.getElementById('result');
+        const winPopup = document.getElementById('winPopup');
+        const prizeImage = document.getElementById('prizeImage');
+        const prizeText = document.getElementById('prizeText');
+        const continueButton = document.getElementById('continueButton');
+        let spinCount = 0;
+
+        // Inicializar reels con múltiples símbolos
+        reels.forEach(reel => {
+            reel.content.innerHTML = Array(6).fill().map(() => {
+                const s = symbols[Math.floor(Math.random() * symbols.length)];
+                return `<div class="symbol"><img src="${s.url}" alt="${s.alt}"></div>`;
+            }).join('');
+        });
+
+        function animateReel(reel, finalSymbol, duration) {
+            const symbolsCopy = [...symbols, ...symbols, ...symbols, ...symbols];
+            reel.content.innerHTML = symbolsCopy.map(s => `<div class="symbol"><img src="${s.url}" alt="${s.alt}"></div>`).join('');
+            const totalHeight = 80 * symbolsCopy.length;
+            reel.content.style.transition = `transform ${duration / 1000}s linear`;
+            reel.content.style.transform = `translateY(-${totalHeight - 400}px)`;
+
+            setTimeout(() => {
+                const finalIndex = symbols.findIndex(s => s.key === finalSymbol.key);
+                const randomAbove = symbols[Math.floor(Math.random() * symbols.length)];
+                const randomBelow = symbols[Math.floor(Math.random() * symbols.length)];
+                reel.content.style.transition = 'transform 0.3s ease-out';
+                reel.content.style.transform = `translateY(-${finalIndex * 80 + 80}px)`;
+                setTimeout(() => {
+                    reel.content.innerHTML = `
+                        <div class="symbol"><img src="${randomAbove.url}" alt="${randomAbove.alt}"></div>
+                        <div class="symbol"><img src="${finalSymbol.url}" alt="${finalSymbol.alt}"></div>
+                        <div class="symbol"><img src="${randomBelow.url}" alt="${randomBelow.alt}"></div>
+                    `;
+                    reel.content.style.transform = `translateY(-20px)`;
+                }, 300);
+            }, duration);
+        }
+
+        spinButton.addEventListener('click', () => {
+            spinCount++;
+            spinButton.disabled = true;
+
+            let spinDuration = 1500;
+
+            if (spinCount < 3) {
+                let resultSymbols;
+                do {
+                    resultSymbols = [
+                        symbols[Math.floor(Math.random() * symbols.length)],
+                        symbols[Math.floor(Math.random() * symbols.length)],
+                        symbols[Math.floor(Math.random() * symbols.length)]
+                    ];
+                } while (resultSymbols[0].key === resultSymbols[1].key && resultSymbols[1].key === resultSymbols[2].key);
+
+                reels.forEach((reel, index) => {
+                    animateReel(reel, resultSymbols[index], spinDuration);
+                });
+
+                setTimeout(() => {
+                    result.textContent = 'Try again!';
+                    spinButton.disabled = false;
+                }, spinDuration);
+            } else {
+                const winningSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                reels.forEach(reel => {
+                    animateReel(reel, winningSymbol, spinDuration);
+                });
+
+                setTimeout(() => {
+                    result.textContent = 'You Win!';
+                    setTimeout(() => {
+                        showWinPopup(winningSymbol);
+                    }, 2000);
+                }, spinDuration);
+            }
+        });
+
+        function getPrize(key) {
+            const prizes = {
+                'helado': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-helado.png' },
+                'dona': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-dona.png' },
+                'hamburguesa': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-hamburguesas.png' },
+                'ramen': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-ramen.png' },
+                'taco': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-taco.png' },
+                'papas': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-papas.png' },
+                'pizza': { text: 'YOU WIN 15MB DATA BUNDLE!', image: 'https://s3-sa-east-1.amazonaws.com/producto.locoporlacocina/wp-content/uploads/2025/05/icono-pizza.png' }
+            };
+            return prizes[key];
+        }
+
+        function showWinPopup(symbol) {
+            const prize = getPrize(symbol.key);
+            prizeImage.src = prize.image;
+            prizeText.textContent = prize.text;
+            winPopup.style.display = 'flex';
+            spinButton.style.display = 'none';
+            result.textContent = '';
+        }
+    </script>
+</body>
+</html>
